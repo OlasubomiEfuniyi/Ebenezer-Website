@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import banner from './banner.jpg';
-import banner1 from './banner1.jpg';
+import banner from './images/banner.jpg';
+import banner1 from './images/banner1.jpg';
 
 
 const EMS = "EMS";
@@ -10,7 +10,7 @@ let data = {
     "EMS": {
         home: {
             banner: {
-                img: banner,
+                img: banner1,
             },
             vision: {
                 img: banner,
@@ -205,7 +205,7 @@ let data = {
     "EMHS": {
         home: {
             banner: {
-                img: banner,
+                img: banner1,
             },
             vision: {
                 img: banner,
@@ -412,7 +412,7 @@ class NavBarLink extends React.Component {
     render() {
         let element = null;
         if(this.props.isActive) {
-            element = <a onClick = {this.props.onClick} className = {this.props.className} href = "#">{this.props.text}<span className="sr-only">(current)</span></a>;
+            element = <a onClick = {this.props.onClick} className = {this.props.className} href = "#" id="active">{this.props.text}<span className="sr-only">(current)</span></a>;
         } else {
             element = <a onClick = {this.props.onClick} className = {this.props.className} href = "#">{this.props.text}</a>
         }
@@ -432,11 +432,11 @@ class NavBarListElement extends React.Component {
         let element = null;
         if(!this.props.isActive) {
             element = (<li className = {this.props.className}>
-                <NavBarLink onClick = {this.props.onClick} className = "nav-link" text={this.props.text} isActive = {this.props.isActive}/>
+                <NavBarLink onClick = {this.props.onClick} className = "nav-link navBarLink" text={this.props.text} isActive = {this.props.isActive}/>
             </li>);
         } else {
-            element = (<li className = {this.props.className + " active"}>
-                <NavBarLink onClick = {this.props.onClick} className = "nav-link" text={this.props.text} isActive = {this.props.isActive}/>
+            element = (<li className = {this.props.className}>
+                <NavBarLink onClick = {this.props.onClick} className = "nav-link navBarLink" text={this.props.text} isActive = {this.props.isActive}/>
             </li>) 
         }
 
@@ -476,11 +476,11 @@ class NavBarList extends React.Component {
 
     render() {
         let listElements = this.props.linkTexts.map((value, index) => {
-            return (<NavBarListElement key = {index} onClick = {() => this.handleClick(value)} className = "nav-item navBarLink" text = {value} isActive = {this.state.listElementsStatus.get(value)}/>);
+            return (<NavBarListElement key = {index} onClick = {() => this.handleClick(value)} className = "nav-item" text = {value} isActive = {this.state.listElementsStatus.get(value)}/>);
         });
 
         return (
-            <ul className="navbar-nav mr-auto">
+            <ul className="navbar-nav navbar-center mr-auto">
                 {listElements}
             </ul>
         );
@@ -497,11 +497,11 @@ class NavBar extends React.Component {
     render() {
         let linkTexts = this.props.linkTexts;
         return (
-            <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <nav className="navbar fixed-top navbar-expand-lg navbar-dark">
                 <div className = "container-fluid">
                     <a className="navbar-brand" href="#" id = "logo" onClick = {() => this.props.onClick("Welcome")}>{this.props.logo}</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
+                        <i className="fas fa-bars toggler-icon"></i>
                     </button>
     
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -1030,6 +1030,15 @@ class ParentPortalContent extends React.Component {
     }
 }
 
+class Footer extends React.Component {
+    render() {
+        return (
+            <div className = "footer">
+                <h5><i className="far fa-copyright"></i> Copyright 2020</h5>
+            </div>
+        );
+    }
+}
 /*************************************************Web Page********************************************************************/
 class Page extends React.Component {
     constructor(props) {
@@ -1093,32 +1102,62 @@ class Page extends React.Component {
 
     render() {
         let content = null;
-        let footer = 
-                    (
-                      <div className = "footer">
-                        <h5><i className="far fa-copyright"></i> Copyright 2020</h5>
-                      </div>
-                    );
+   
         switch(this.state.currentPage) {
             case "Home":
                 content = (
-                    <div className = "content">
-                        <div className = "banner"><img src = {data[this.state.school].home.banner.img} className="img-fluid" alt="Home Page Banner" /></div>
-                        <div className = "block">
-                            <div className="row">
-                                <div className="col-md card-col">
+                    <div className = "home-content">
+                        <div className = "banner" style={{backgroundImage:`url(${data[this.state.school].home.banner.img})`}}></div>
+                        <div className = "home-info">
+                            <div className = "home-info-content">
+                                <nav id="home-info-nav">
+                                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <a className="nav-item nav-link active" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="true">Vision</a>
+                                        <a className="nav-item nav-link" id="nav-achievements-tab" data-toggle="tab" href="#nav-achievements" role="tab" aria-controls="nav-achievements" aria-selected="false">Achievements</a>
+                                        <a className="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">History</a>
+                                    </div>
+                                </nav>
+                                <div className="tab-content" id="nav-tabContent">
+                                    <div className="tab-pane fade show active" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
+                                        <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.state.school].home.history.img})`}}></div>
+                                        <div className = "tab-pane-text">
+                                            <h5><strong>{data[this.state.school].home.vision.title}</strong></h5>
+                                            <p>{data[this.state.school].home.vision.text}</p>
+                                        </div>
+                                    </div>
+                                    <div className="tab-pane fade" id="nav-achievements" role="tabpanel" aria-labelledby="nav-achievements-tab">
+                                        <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.state.school].home.achievements.img})`}}></div>
+                                        <div className = "tab-pane-text">
+                                            <h5><strong>{data[this.state.school].home.achievements.title}</strong></h5>
+                                            <p>{data[this.state.school].home.achievements.text}</p>
+                                        </div>
+                                    </div>
+                                    <div className="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+                                        <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.state.school].home.history.img})`}}></div>
+                                        <div className = "tab-pane-text">
+                                            <h5><strong>{data[this.state.school].home.history.title}</strong></h5>
+                                            <p>{data[this.state.school].home.history.text}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className = "home-info-small">
+                            <div className="card-row">
+                                <div className="card-col">
                                     <ExtraInfoCard class = "home-card" 
                                         src = {data[this.state.school].home.vision.img} alt = "Vision Picture" title = {data[this.state.school].home.vision.title}
                                         description = {data[this.state.school].home.vision.text}
                                         buttonText = "More" />
                                 </div>
-                                <div className="col-md card-col">
+                                <div className="card-col">
                                     <ExtraInfoCard class = "home-card" 
                                         src = {data[this.state.school].home.achievements.img} alt = "Achievements Picture" title = {data[this.state.school].home.achievements.title} 
                                         description = {data[this.state.school].home.achievements.text}
                                         buttonText = "More" />
                                 </div>
-                                <div className="col-md card-col">
+                                <div className="card-col">
                                 <ExtraInfoCard class = "home-card" 
                                         src = {data[this.state.school].home.history.img} alt = "History Picture" title = {data[this.state.school].home.history.title}
                                         description = {data[this.state.school].home.history.text}
@@ -1126,7 +1165,7 @@ class Page extends React.Component {
                                 </div>
                             </div>
                         </div>
-
+                        <Footer />
                     </div>
                 );
                 break;
@@ -1155,16 +1194,18 @@ class Page extends React.Component {
             case "Welcome":
                 content = 
                 (
-                    <div className = "container-fluid welcome">
-                        <div className = "welcome-header row">
-                            <div className = "col-sm-12 center-text">
-                                <h1>Welcome</h1>
+                    <div id="welcome-page" style = {{backgroundImage: `url(${banner})`}}>
+                        <div className = "welcome">
+                            <div className = "welcome-header">
+                                <div className = "col-sm-12 center-text">
+                                    <h1 className="welcome-header-text">Welcome</h1>
+                                </div>
                             </div>
-                        </div>
-                        <br />
-                        <div className="welcome-buttons">
-                            <button type = "button" className = "welcome-button btn btn-success" onClick={() => this.handleClickForWelcome(EMS)}>Primary School</button>
-                            <button type = "button" className = "welcome-button btn btn-success" onClick={() => this.handleClickForWelcome(EMHS)}>Secondary School</button>
+                            <br />
+                            <div className="welcome-buttons">
+                                <button type = "button" className = "welcome-button btn btn-primary" onClick={() => this.handleClickForWelcome(EMS)}>Primary School</button>
+                                <button type = "button" className = "welcome-button btn btn-primary" onClick={() => this.handleClickForWelcome(EMHS)}>Secondary School</button>
+                            </div>
                         </div>
                     </div>
                 );
@@ -1173,14 +1214,13 @@ class Page extends React.Component {
 
         if(this.state.currentPage !== "Welcome") {
             return (
-                <div>
-                    <div><NavBar linkTexts = {["Home", "Parent Portal", "Gallery", "Calendar", "Contact Us"]} logo = {this.state.school} onClick = {(currentPage) => this.handleClick(currentPage)}/></div>
-                    <div className="container-fluid pageContent">{content}</div>
-                    <div className = "container-fluid">{footer}</div>
+                <div id="page">
+                    <NavBar linkTexts = {["Home", "Parent Portal", "Gallery", "Calendar", "Contact Us"]} logo = {this.state.school} onClick = {(currentPage) => this.handleClick(currentPage)}/>
+                    <div id="pageContent">{content}</div>
                 </div>
             );
         } else {
-            return (<div className = "bg-primary">{content}</div>);
+            return (content);
         }
     }
 }

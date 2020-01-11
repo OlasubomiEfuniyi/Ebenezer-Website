@@ -1,17 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Open+Sans&display=swap');
 
 /***************************** General Styling **************************************/
+body, html, #root {
+    height: 100%;
+}
+
 .card-col {
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: left;
 }
 
 .card-title{
     font-weight: bold;
-}
-
-.block {
-    margin-top: 80px;
-
 }
 
 .footer {
@@ -22,8 +23,12 @@
     font-family: 'Open Sans', sans-serif;
 }
 
-.pageContent {
-    margin-top: 80px;
+#page {
+    height: 100%;
+}
+
+#pageContent {
+    height: 100%;
 }
 
 .center-text {
@@ -38,30 +43,55 @@ a:hover {
     text-decoration: none;
 }
 /************************ Navigation Styling *******************************************/
-.active {
-    background-color: #0d3580 !important;
-    border-radius: 3%;
+.navbar {
+    background-color: white;
 }
 
-.active > a {
-    font-weight: bold;
+.nav-item {
+    text-align: center;
+}
+
+.navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.toggler-icon {
+    color: #0d3580 !important;
+}
+
+#active {
+    background-color: #0d3580 !important;
+    border-radius: 3%;
+    color: white !important;
 }
 
 .navBarLink {
-    margin-left: 50px;
     font-family: 'Open Sans', sans-serif;
-}
-
-.navBarLink > a {
-    color:white !important;
+    color:#0d3580 !important;
+    font-size: 17px !important;
+    margin-left: 10px;
 }
 
 #logo {
     font-weight: bold;
     font-family: 'Lobster', cursive;
+    color: #0d3580;
 }
 
 /******************************** Home page styling *******************************************/
+.home-content {
+    height: 100%;
+}
+
+.banner {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
 .home-card {
     width: 100%;
     margin: auto;
@@ -69,17 +99,81 @@ a:hover {
     height: 100%;
 }
 
+.home-info {
+    margin-top: 80px;
+    width: 100%;
+}
+
+.home-info-small {
+    margin-top: 80px;
+    width: 100%;
+    display: none;
+}
+
+.home-info-content {
+    width: 80%;
+    margin: auto;
+}
+
+.nav-link {
+    color: #0d3580;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 17px;
+}
+
+.nav-link.active {
+    color: #0d3580 !important;
+}
+
+.tab-content {
+    font-family: 'Open Sans', sans-serif;
+    margin-top: 20px;
+    height: 300px;
+}
+
+.tab-pane {
+    height: 100%;
+}
+
+.tab-pane-img {
+    height: 100%;
+    width: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 0 !important;
+    float: left;
+}
+
+.tab-pane-text {
+    float: right;
+    width: 50%;
+    padding-left: 50px;
+}
+
 /********************************* Welcome Page Styling ***********************************************/
+#welcome-page {
+    height:100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+#welcome-page > .welcome {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 200px;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+}
+
 .welcome-header {
     font-family: 'Lobster', cursive;
 }
 
-.welcome {
-    font-family: 'Open Sans', sans-serif;
-    margin-top: 200px;
-    color: white;
-    padding-bottom: 30px;
-    padding-top: 30px;
+.welcome-header-text {
+    font-size: 80px; 
 }
 
 .welcome-buttons {
@@ -193,5 +287,26 @@ a:hover {
     .welcome-button{
         margin-top: 10px;
         margin-bottom: 10px;
+    }
+}
+
+/* Style the collapsed navbar */
+@media(max-width: 991px) {
+    .navbar-nav.navbar-center {
+        position: relative;
+        left: 0%;
+        transform: translateX(0%);
+        width: 100%;
+    }
+}
+
+/* Change the local navigation on the home page to cards */
+@media(max-width: 800px) {
+    .home-info {
+        display: none;
+    }
+
+    .home-info-small {
+        display: block;
     }
 }
