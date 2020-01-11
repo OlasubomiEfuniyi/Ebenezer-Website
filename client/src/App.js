@@ -432,11 +432,11 @@ class NavBarListElement extends React.Component {
         let element = null;
         if(!this.props.isActive) {
             element = (<li className = {this.props.className}>
-                <NavBarLink onClick = {this.props.onClick} className = "nav-link navBarLink" text={this.props.text} isActive = {this.props.isActive}/>
+                <NavBarLink onClick = {this.props.onClick} className = "nav-link" text={this.props.text} isActive = {this.props.isActive}/>
             </li>);
         } else {
             element = (<li className = {this.props.className + " active"}>
-                <NavBarLink onClick = {this.props.onClick} className = "nav-link navBarLink" text={this.props.text} isActive = {this.props.isActive}/>
+                <NavBarLink onClick = {this.props.onClick} className = "nav-link" text={this.props.text} isActive = {this.props.isActive}/>
             </li>) 
         }
 
@@ -476,7 +476,7 @@ class NavBarList extends React.Component {
 
     render() {
         let listElements = this.props.linkTexts.map((value, index) => {
-            return (<NavBarListElement key = {index} onClick = {() => this.handleClick(value)} className = "nav-item" text = {value} isActive = {this.state.listElementsStatus.get(value)}/>);
+            return (<NavBarListElement key = {index} onClick = {() => this.handleClick(value)} className = "nav-item navBarLink" text = {value} isActive = {this.state.listElementsStatus.get(value)}/>);
         });
 
         return (
@@ -497,14 +497,14 @@ class NavBar extends React.Component {
     render() {
         let linkTexts = this.props.linkTexts;
         return (
-            <nav className="navbar fixed-top navbar-expand-lg navbar-dark">
+            <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
                 <div className = "container-fluid">
                     <a className="navbar-brand" href="#" id = "logo" onClick = {() => this.props.onClick("Welcome")}>{this.props.logo}</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
     
-                    <div className="collapse navbar-collapse navBar" id="navbarSupportedContent">
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <NavBarList onClick = {this.props.onClick} linkTexts = {linkTexts}/>
                     </div>
                 </div>

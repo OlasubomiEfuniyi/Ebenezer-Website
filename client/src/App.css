@@ -44,17 +44,16 @@ a:hover {
 }
 
 .active > a {
-    color: white !important;
+    font-weight: bold;
 }
 
 .navBarLink {
+    margin-left: 50px;
     font-family: 'Open Sans', sans-serif;
-    color:#0d3580 !important;
-    font-size: 15px !important;
 }
 
-.navBar {
-    text-align: center !important;
+.navBarLink > a {
+    color:white !important;
 }
 
 #logo {
