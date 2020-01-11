@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster|Open+Sans&display=swap');
+
+/***************************** General Styling **************************************/
+.card-col {
+    margin-top: 20px;
+}
+
+.card-title{
+    font-weight: bold;
+}
+
+.block {
+    margin-top: 80px;
+
+}
+
+.footer {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    margin-top: 80px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.pageContent {
+    margin-top: 80px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.invalid-text {
+    color: red !important;
+}
+
+a:hover {
+    text-decoration: none;
+}
+/************************ Navigation Styling *******************************************/
+.active {
+    background-color: #0d3580 !important;
+    border-radius: 3%;
+}
+
+.active > a {
+    color: white !important;
+}
+
+.navBarLink {
+    font-family: 'Open Sans', sans-serif;
+    color:#0d3580 !important;
+    font-size: 15px !important;
+}
+
+.navBar {
+    text-align: center !important;
+}
+
+#logo {
+    font-weight: bold;
+    font-family: 'Lobster', cursive;
+}
+
+/******************************** Home page styling *******************************************/
+.home-card {
+    width: 100%;
+    margin: auto;
+    font-family: 'Open Sans', sans-serif;
+    height: 100%;
+}
+
+/********************************* Welcome Page Styling ***********************************************/
+.welcome-header {
+    font-family: 'Lobster', cursive;
+}
+
+.welcome {
+    font-family: 'Open Sans', sans-serif;
+    margin-top: 200px;
+    color: white;
+    padding-bottom: 30px;
+    padding-top: 30px;
+}
+
+.welcome-buttons {
+    text-align: center;
+}
+
+.welcome-button {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+/******************************** Contact Us styling ******************************************/
+.contact-us-content {
+    font-family: 'Open Sans', sans-serif;
+    margin-top: 100px;
+}
+
+.contact-us-questions {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.contact-us-questions > .card {
+    width: 100%;
+    margin: auto;
+}
+
+.contact-us-form {
+    margin: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.contact-us-info {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.contact-us-info  > .card {
+    width: 100%;
+    margin: auto;
+}
+
+.contact-us-header {
+    font-weight: bold;
+    color: white;
+    font-family: 'Lobster', cursive;
+    background-color: #0d3580;
+}
+
+/******************** Calendar styling **************/
+.calendar-content {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.calendar-table-row {
+    border-top: 5px solid #0d3580;
+}
+
+.calendar-table-row:hover {
+    color: white !important;
+    background-color: #0d3580 !important;
+}
+
+.calendar-table-row:hover > td > a {
+    color: white !important;
+}
+
+.calendar-card-header {
+    font-weight: bold;
+    color: white;
+    font-family: 'Lobster', cursive;
+    background-color: #0d3580;
+}
+
+/******************* Gallery Styling ********************************/
+.slideshow {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 60px;
+}
+
+.gallery-card {
+    font-family: "Open sans", sans-serif;
+    margin-bottom: 10px;
+}
+
+/********************* Parent Portal Login Styling ****************************/
+.parent-portal-login-form {
+    width: 50%;
+    margin: auto;
+    margin-top: 100px;
+}
+
+/********************** Parent Portal Content Styling ***********************/
+.parent-portal-content {
+    margin-top: 100px;
+    font-family: 'Open sans', sans-serif;
+}
+
+.parent-portal-full-name {
+    font-family: 'Open sans', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/******************************** Media queries ***********************************************/
+/* Make the buttons on the welcome page have enough space when stacked */
+@media(max-width: 440px) {
+    .welcome-button{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
