@@ -356,7 +356,7 @@ a:hover {
 }
 
 .parent-portal-login-form > .form-group > input:focus {
-    color: black;
+    color: white;
 }
 
 /********************** Parent Portal Content Styling ***********************/
