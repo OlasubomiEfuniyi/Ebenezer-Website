@@ -17,9 +17,9 @@ body, html, #root {
 
 .footer {
     width: 100%;
-    height: 40px;
+    padding-top: 60px;
+    color: black;
     text-align: center;
-    margin-top: 80px;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -41,6 +41,12 @@ body, html, #root {
 
 a:hover {
     text-decoration: none;
+}
+
+.tint {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 /************************ Navigation Styling *******************************************/
 .navbar {
@@ -189,15 +195,28 @@ a:hover {
 /******************************** Contact Us styling ******************************************/
 .contact-us-content {
     font-family: 'Open Sans', sans-serif;
-    margin-top: 100px;
+    padding-top: 100px;
+    display: flex;
+    width: 100%;
 }
 
 .contact-us-questions {
     margin-top: 10px;
     margin-bottom: 10px;
+    width: 50%;
 }
 
-.contact-us-questions > .card {
+.contact-us-questions-card-container {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.contact-us-info-card-container {
+    width: 100%;
+}
+
+.contact-us-questions-card-container > .card {
     width: 100%;
     margin: auto;
 }
@@ -211,27 +230,54 @@ a:hover {
 .contact-us-info {
     margin-top: 10px;
     margin-bottom: 10px;
+    width: 50%;
+    margin: auto;   
 }
 
-.contact-us-info  > .card {
-    width: 100%;
+.contact-us-info-card-container > .card {
+    width: 80%;
     margin: auto;
 }
 
 .contact-us-header {
     font-weight: bold;
-    color: white;
-    font-family: 'Lobster', cursive;
-    background-color: #0d3580;
-}
-
-/******************** Calendar styling **************/
-.calendar-content {
+    color: #0d3580;
     font-family: 'Open Sans', sans-serif;
 }
 
+/******************** Calendar styling **************/
+.calendar {
+    padding-top: 100px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.calendar > p {
+    padding-left: 20px;
+}
+
+.calendar-content {
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+}
+
+.academic-calendar {
+    width: 50%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.academic-calendar > table > thead > tr > th {
+    color: #0d3580;
+}
+
+.academic-calendar-description {
+    width: 50%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .calendar-table-row {
-    border-top: 5px solid #0d3580;
+    border-top: 1px solid #0d3580;
 }
 
 .calendar-table-row:hover {
@@ -245,12 +291,25 @@ a:hover {
 
 .calendar-card-header {
     font-weight: bold;
-    color: white;
-    font-family: 'Lobster', cursive;
-    background-color: #0d3580;
+    color: #0d3580;
+    font-family: 'Open Sans', sans-serif;
 }
 
 /******************* Gallery Styling ********************************/
+.gallery {
+    padding-top: 50px;
+}
+
+.gallery-cards-container {
+    display: flex;
+}
+
+.gallery-card-container {
+    margin-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .slideshow {
     margin-left: 20px;
     margin-right: 20px;
@@ -259,14 +318,45 @@ a:hover {
 
 .gallery-card {
     font-family: "Open sans", sans-serif;
-    margin-bottom: 10px;
 }
 
 /********************* Parent Portal Login Styling ****************************/
-.parent-portal-login-form {
-    width: 50%;
+.parent-portal-login {
+    width: 100%;
+    height: 100%;
+    background-repeat: none;
+    background-size: cover;
+    background-position: center;
+}
+
+.parent-portal-login > div {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.parent-portal-login-form-container {
+    width: 30%;
     margin: auto;
-    margin-top: 100px;
+    padding-top: 100px;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: center;
+    border: 2px solid white;
+    border-radius: 5%;
+    padding-bottom: 100px;
+}
+
+.parent-portal-login-form > .form-group > input {
+    color: white;
+    margin: auto;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid white;
+    font-size: 20px;
+}
+
+.parent-portal-login-form > .form-group > input:focus {
+    color: black;
 }
 
 /********************** Parent Portal Content Styling ***********************/
@@ -283,15 +373,27 @@ a:hover {
 
 /******************************** Media queries ***********************************************/
 /* Make the buttons on the welcome page have enough space when stacked */
-@media(max-width: 440px) {
-    .welcome-button{
+@media only screen and (max-width: 440px) {
+    .welcome-button {
         margin-top: 10px;
         margin-bottom: 10px;
     }
+    .parent-portal-login-form-container {
+        width: 70%;
+    }
 }
 
-/* Style the collapsed navbar */
-@media(max-width: 991px) {
+/* Change the width of the parent portal login container */
+@media only screen and (min-width: 0px) and (max-width: 440px){
+    .parent-portal-login-form-container {
+        width: 70%;
+    }
+}
+
+/* Style the collapsed navbar.
+* Increase the width of the parent portal login form container
+*/
+@media only screen and (max-width: 991px) {
     .navbar-nav.navbar-center {
         position: relative;
         left: 0%;
@@ -300,13 +402,63 @@ a:hover {
     }
 }
 
-/* Change the local navigation on the home page to cards */
-@media(max-width: 800px) {
+/* Change the width of the parent portal login container */
+@media only screen and (min-width: 991px) and (max-width: 1024px) {
+    .parent-portal-login-form-container {
+        width: 40%;
+    }
+}
+
+/* Change the local navigation on the home page to cards 
+* Increase the width of the parent portal login form container.
+*/
+@media only screen and (max-width: 800px) {
     .home-info {
         display: none;
     }
 
     .home-info-small {
         display: block;
+    }
+}
+
+/* Change the width of the parent portal login container */
+@media only screen and (max-width: 800px) and (min-width: 441px) {
+    .parent-portal-login-form-container {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 0px) and (max-width:  700px) {
+    .gallery-cards-container {
+        display: block;
+    }
+
+    .gallery-card {
+        width: 100%;
+    }
+
+    .calendar-content {
+        display: block;
+    }
+
+    .academic-calendar {
+        width: 100%;
+    }
+
+    .academic-calendar-description {
+        width: 100%;
+    }
+
+    .contact-us-content {
+        display: block;
+    }
+
+    .contact-us-questions {
+        width: 100%;
+    }
+
+    .contact-us-info {
+        width: 100%;
     }
 }

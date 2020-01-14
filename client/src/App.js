@@ -3,7 +3,6 @@ import './App.css';
 import banner from './images/banner.jpg';
 import banner1 from './images/banner1.jpg';
 
-
 const EMS = "EMS";
 const EMHS = "EMHS";
 let data = {
@@ -200,6 +199,9 @@ let data = {
                 },
             ],
         },
+        parentPortal: {
+            backgroundImage: banner,
+        }
 
     },
     "EMHS": {
@@ -398,6 +400,9 @@ let data = {
                 },
             ],
         },
+        parentPortal: {
+            backgroundImage: banner,
+        }
     },
 } 
 
@@ -636,44 +641,46 @@ class ContactUsContent extends React.Component {
         if(!this.state.submitted) {
             questionSection = 
             (
-                <div className="contact-us-questions col-lg-6">
-                    <div className="card">
-                        <div className="card-header contact-us-header">
-                            <h5 className="card-title">Questions</h5>
-                        </div>
-                        <div className="card-body">
-                            <form className="contact-us-form" onSubmit={(event) => this.sendMail(event)}>
-                                <div className = "form-row">
-                                    <div className="form-group col-md-4">
-                                        <select defaultValue = {"Mrs."} id="honorifics" className="form-control">
-                                            <option value="Mrs.">Mrs.</option>
-                                            <option value="Mr.">Mr.</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group col-md-8">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control" id="fullName" aria-describedby = "fullNameHelp" placeholder="Full Name" required/>
-                                            <small id="fullNameHelp" className="form-text text-muted invalid-text"></small>
+                <div className="contact-us-questions">
+                    <div className="contact-us-questions-card-container">
+                        <div className="card">
+                            <div className="card-header contact-us-header">
+                                <h5 className="card-title">Questions</h5>
+                            </div>
+                            <div className="card-body">
+                                <form className="contact-us-form" onSubmit={(event) => this.sendMail(event)}>
+                                    <div className = "form-row">
+                                        <div className="form-group col-md-4">
+                                            <select defaultValue = {"Mrs."} id="honorifics" className="form-control">
+                                                <option value="Mrs.">Mrs.</option>
+                                                <option value="Mr.">Mr.</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group col-md-8">
+                                            <div className="form-group">
+                                                <input type="text" className="form-control" id="fullName" aria-describedby = "fullNameHelp" placeholder="Full Name" required/>
+                                                <small id="fullNameHelp" className="form-text text-muted invalid-text"></small>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group col-md-6">
-                                        <input type="email" className="form-control" id="email" placeholder="Email"/>
+                                    <div className="form-row">
+                                        <div className="form-group col-md-6">
+                                            <input type="email" className="form-control" id="email" placeholder="Email"/>
+                                        </div>
+                                        <div className="form-group col-md-6">
+                                            <input type="tel" className="form-control" id="number" aria-describedby = "numberHelp" placeholder="Phone Number" required/>
+                                            <small id="numberHelp" className="form-text text-muted invalid-text"></small>
+                                        </div>
                                     </div>
-                                    <div className="form-group col-md-6">
-                                        <input type="tel" className="form-control" id="number" aria-describedby = "numberHelp" placeholder="Phone Number" required/>
-                                        <small id="numberHelp" className="form-text text-muted invalid-text"></small>
+                                    <div className="form-row">
+                                        <div className="form-group col-md-12">
+                                            <textarea className="form-control" id="question" aria-describedby = "questionHelp" rows = "3" placeholder = "Question" required></textarea>
+                                            <small id="questionHelp" className="form-text text-muted invalid-text"></small>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group col-md-12">
-                                        <textarea className="form-control" id="question" aria-describedby = "questionHelp" rows = "3" placeholder = "Question" required></textarea>
-                                        <small id="questionHelp" className="form-text text-muted invalid-text"></small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary" onClick = {(event) => this.validateContactUs(event)}>Submit</button>
-                            </form>
+                                    <button className="btn btn-primary" onClick = {(event) => this.validateContactUs(event)}>Submit</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -696,20 +703,25 @@ class ContactUsContent extends React.Component {
         }
 
         return (
-            <div className="contact-us-content row">
-                {questionSection}
-                <div className="contact-us-info col-lg-6">
-                    <div className="card">
-                        <div className="card-header contact-us-header">
-                            <h5 className="card-title">Our Contact Information</h5>
-                        </div>
-                        <div className="card-body">
-                            <p className="card-text"><strong>Phone: </strong>{data[this.props.school].contactUs.contactInfo.phone}</p>
-                            <p><strong>Email: </strong>{data[this.props.school].contactUs.contactInfo.email}</p>
-                            <p><strong>Location: </strong>{data[this.props.school].contactUs.contactInfo.location}</p>
+            <div>
+                <div className="contact-us-content">
+                    {questionSection}
+                    <div className="contact-us-info">
+                        <div className="contact-us-info-card-container">
+                            <div className="card">
+                                <div className="card-header contact-us-header">
+                                    <h5 className="card-title">Our Contact Information</h5>
+                                </div>
+                                <div className="card-body">
+                                    <p className="card-text"><strong>Phone: </strong>{data[this.props.school].contactUs.contactInfo.phone}</p>
+                                    <p><strong>Email: </strong>{data[this.props.school].contactUs.contactInfo.email}</p>
+                                    <p><strong>Location: </strong>{data[this.props.school].contactUs.contactInfo.location}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <Footer />
             </div>
         );
     }
@@ -746,25 +758,29 @@ class CalendarContent extends React.Component {
 
     render() {
         return (
-            <div className="calendar-content">
-                <div className = "row">
-                    <div className = "col-md-6">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Events</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data[this.props.school].calendar.table.events.map((event, index) => <tr className = "calendar-table-row" key={index}><td>{event.date}</td><td><a href = "#" onClick={()=>this.handleClick(index)}>{event.description}</a></td></tr>)}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className = "col-md-6">
-                        {this.state.rightContent}
+            <div>
+                <div className="calendar">
+                    <p>Click an event for more information</p>
+                    <div className="calendar-content">
+                        <div className="academic-calendar">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Events</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data[this.props.school].calendar.table.events.map((event, index) => <tr className = "calendar-table-row" key={index}><td>{event.date}</td><td><a href = "#" onClick={()=>this.handleClick(index)}>{event.description}</a></td></tr>)}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="academic-calendar-description">
+                            {this.state.rightContent}
+                        </div>
                     </div>
                 </div>
+                <Footer />
             </div>
         );
     }
@@ -810,11 +826,12 @@ class GalleryContent extends React.Component {
 
     render() {
         return (
-            <div>
-                {this.state.currentSlideshow != null ? (<div className="row slideshow"><Carousel images={data[this.props.school].gallery.images[this.state.currentSlideshow].slides}/></div>) : ""}
-                <div className="row">
-                    {data[this.props.school].gallery.images.map((image, index)=><div className="col-md-4" key ={index}><Card class = "gallery-card" title={image.title} src={image.src} alt={image.alt} description={image.description} buttonText={"View Gallery"} onClick={() => this.handleClick(index)}/></div>)}
+            <div className="gallery">
+                {this.state.currentSlideshow != null ? (<div className="slideshow"><Carousel images={data[this.props.school].gallery.images[this.state.currentSlideshow].slides}/></div>) : ""}
+                <div className="gallery-cards-container">
+                    {data[this.props.school].gallery.images.map((image, index)=><div className = "gallery-card-container" key ={index}><Card class = "gallery-card" title={image.title} src={image.src} alt={image.alt} description={image.description} buttonText={"View Gallery"} onClick={() => this.handleClick(index)}/></div>)}
                 </div>
+                <Footer />
             </div>
         );
     }
@@ -870,24 +887,25 @@ class ParentPortalLogin extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className = "row">
-                    <div className = "parent-portal-login-form">
-                        <form>
+            <div style={{backgroundImage: `url(${data[this.props.school].parentPortal.backgroundImage})`}} className = "parent-portal-login">
+                <div className = "tint">
+                    <div className="parent-portal-login-form-container">
+                        <form className="parent-portal-login-form">
                             <div className="form-group">
-                                <input type="text" className="form-control" id="username" aria-describedby="username" placeholder="Username" />
-                                <small id="usernameHelp" className="form-text text-muted invalid-text"></small>
+                                <input type="text" className="form-control" id="username" aria-describedby="username" placeholder="username" />
+                                <small style={{backgroundColor: "white"}} id="usernameHelp" className="form-text text-muted invalid-text"></small>
                             </div>
                             <div className="form-group">
-                                <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="Password" />
-                                <small id="passwordHelp" className="form-text text-muted invalid-text"></small>
+                                <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="password" />
+                                <small style={{backgroundColor: "white"}} id="passwordHelp" className="form-text text-muted invalid-text"></small>
                             </div>
                             <button type="button" onClick={(event) => this.validate(event)} className="btn btn-primary">Login</button>
                         </form>
                     </div>
+                    <Footer />
                 </div>
             </div>
-        );
+        );  
     }
 }
 
@@ -1025,6 +1043,7 @@ class ParentPortalContent extends React.Component {
                         </table>
                     </div>
                 </div>
+                <Footer />
             </div>
         );
     }
@@ -1171,7 +1190,7 @@ class Page extends React.Component {
                 break;
             case "Parent Portal": 
                 content = (
-                    this.state.loggedIntoParentPortal !== true ? <ParentPortalLogin handleLogin={(userData) => this.handleParentPortalLogin(userData)}/>:<ParentPortalContent userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()}/>
+                    this.state.loggedIntoParentPortal !== true ? <ParentPortalLogin school={this.state.school} handleLogin={(userData) => this.handleParentPortalLogin(userData)}/>:<ParentPortalContent userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()}/>
                 );
                 break;
             case "Gallery":
