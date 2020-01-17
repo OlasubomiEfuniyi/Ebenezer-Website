@@ -5,6 +5,14 @@ import banner1 from './images/banner1.jpg';
 
 const EMS = "EMS";
 const EMHS = "EMHS";
+const HOME = "Home";
+const PARENT_PORTAL_LOGIN = "Parent Portal";
+const GALLERY = "Gallery";
+const CALENDAR = "Calendar";
+const CONTACT_US = "Contact US";
+const WELCOME = "Welcome";
+const PARENT_PORTAL = "Parent Portal Dashboard";
+
 let data = {
     "EMS": {
         home: {
@@ -457,24 +465,22 @@ class NavBarList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listElementsStatus: new Map(this.props.linkTexts.map((value, index) => {
-                if(index == 0) {
+            listElementsStatus: new Map(this.props.linkTexts.map((value) => {
+                if(value === this.props.activeLink) {
                     return [value, true];
                 } else {
                     return [value, false];
                 }
             })),
-            activeListElement: this.props.linkTexts[0],
         }
     }
 
     handleClick(key) {
         let newListElementsStatus = new Map(this.state.listElementsStatus);
-        newListElementsStatus.set(this.state.activeListElement, false);
+        newListElementsStatus.set(this.props.activeLink, false);
         newListElementsStatus.set(key, true);
         this.setState({
             listElementsStatus: newListElementsStatus,
-            activeListElement: key
         });
         this.props.onClick(key);
     }
@@ -510,7 +516,7 @@ class NavBar extends React.Component {
                     </button>
     
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <NavBarList onClick = {this.props.onClick} linkTexts = {linkTexts}/>
+                        <NavBarList activeLink = {this.props.activeLink} onClick = {this.props.onClick} linkTexts = {linkTexts}/>
                     </div>
                 </div>
             </nav>
@@ -923,7 +929,9 @@ class ParentPortalContent extends React.Component {
             paymentHistory: [],
             children: [],
         }
+    }
 
+    componentDidMount() {
         this.getChildren();
         this.getPaymentHistory();
     }
@@ -950,6 +958,12 @@ class ParentPortalContent extends React.Component {
     }
 
     getDataForChild(childData) {
+        this.setState({activeChild: childData});
+        this.getTotalBalace(childData);
+        this.getPaymentHistory(childData);
+    }
+
+    getTotalBalace(childData) {
         let xhttp = new XMLHttpRequest();
 
         let outerThis = this;
@@ -960,7 +974,6 @@ class ParentPortalContent extends React.Component {
                 let data = JSON.parse(this.response);
                 console.log(data);
                 outerThis.setState({
-                    activeChild: childData,
                     totalBalance: data.totalBalance,
                 });
             }
@@ -971,7 +984,7 @@ class ParentPortalContent extends React.Component {
         xhttp.send(JSON.stringify({child: childData, username: this.props.userData.username}));
     }
 
-    getPaymentHistory() {
+    getPaymentHistory(childData) {
         let xhttp = new XMLHttpRequest();
 
         let outerThis = this;
@@ -987,42 +1000,49 @@ class ParentPortalContent extends React.Component {
 
         xhttp.open("POST", "http://localhost:9000/parent-portal/get-payment-history", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhttp.send(JSON.stringify({username: this.props.userData.username, child: this.state.activeChild}));
+        xhttp.send(JSON.stringify({username: this.props.userData.username, child: childData}));
     }
 
     render() {
         let balance = (this.state.activeChild === null) ? this.props.userData.totalBalance : this.state.totalBalance;
-        this.getPaymentHistory();
         return(
             <div className="parent-portal-content">
-                <div className="row">
-                    <div className="col-md-6">
-                        <h5 className="parent-portal-full-name float-left">{this.props.userData["firstName"] + " " + this.props.userData["lastName"]}</h5>
-                    </div>
-                    <div className="col-md-6">
-                        <button type="button" className="float-right btn btn-success" onClick={() => this.props.handleLogout()}>Logout</button>
+                <div className="parent-portal-heading">
+                    <div className="parent-portal-logout">
+                        <button type="button" className="float-right btn btn-danger" onClick={() => this.props.handleLogout()}>Logout</button>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-4">
-                        <h5>Filter by Child</h5>
+                <div className="parent-portal-dashboard">
+                    <div className="parent-portal-dashboard-controls bg-danger">
+                        <div className = "parent-portal-full-name"><h5>{this.props.userData["lastName"] + "'s Account"}</h5></div>
                         <form>
                             <div className="radio">
                                 <label>
                                     <input type="radio" checked={!this.state.activeChild} value="All" onChange = {
                                         () => {
-                                            this.setState({activeChild: null});
+                                            this.getDataForChild(null);
                                         }
                                     }/>All
                                 </label>
                             </div>
-                            {this.state.children.map((value, index) => <div key = {index} className="radio"><label><input type="radio" checked={this.state.activeChild && (this.state.activeChild.firstName === value.firstName && this.state.activeChild.lastName === value.lastName)} value = {value.firstName + " " + value.lastName} onChange={() => this.getDataForChild(value)}/></label>{value.firstName + " " + value.lastName}</div>)}
+                            {this.state.children.map((value, index) => 
+                                (
+                                    <div key = {index} className="radio">
+                                        <label>
+                                            <input type="radio" 
+                                            checked={this.state.activeChild && (this.state.activeChild.firstName === value.firstName && this.state.activeChild.lastName === value.lastName)} 
+                                            value = {value.firstName + " " + value.lastName} 
+                                            onChange={() => this.getDataForChild(value)}/>
+                                        </label>{value.firstName + " " + value.lastName}
+                                    </div>
+                                )
+                            )}
                         </form>
                     </div>
-                    <div className="col-md-8">
+                    <div className="parent-portal-dashboard-content">
                         <h5>Total Balance: &#8358;{balance}</h5>
                         <table className="table">
-                            <thead>
+                            <thead className="bg-danger">
                                 <tr>
                                     <th scope="col">Date</th>
                                     <th scope="col">Amount</th>
@@ -1087,6 +1107,7 @@ class Page extends React.Component {
     handleParentPortalLogin(userData) {
         this.setState({
             loggedIntoParentPortal: true,
+            currentPage: PARENT_PORTAL, //This is the only place from which the current page can be set to this
             userData: userData,
         });
         this.loadTotalBalance(userData);
@@ -1096,6 +1117,7 @@ class Page extends React.Component {
         this.setState({
             loggedIntoParentPortal: false,
             userData: null,
+            currentPage: PARENT_PORTAL_LOGIN,
         });
     }
 
@@ -1123,7 +1145,7 @@ class Page extends React.Component {
         let content = null;
    
         switch(this.state.currentPage) {
-            case "Home":
+            case HOME:
                 content = (
                     <div className = "home-content">
                         <div className = "banner" style={{backgroundImage:`url(${data[this.state.school].home.banner.img})`}}></div>
@@ -1188,29 +1210,34 @@ class Page extends React.Component {
                     </div>
                 );
                 break;
-            case "Parent Portal": 
+            case PARENT_PORTAL_LOGIN:
                 content = (
-                    this.state.loggedIntoParentPortal !== true ? <ParentPortalLogin school={this.state.school} handleLogin={(userData) => this.handleParentPortalLogin(userData)}/>:<ParentPortalContent userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()}/>
+                    <ParentPortalLogin school={this.state.school} handleLogin={(userData) => this.handleParentPortalLogin(userData)}/>
                 );
                 break;
-            case "Gallery":
+            case PARENT_PORTAL:
+                content = (
+                    <ParentPortalContent userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()}/>
+                );
+                break;
+            case GALLERY:
                 content = (
                     <GalleryContent school={this.state.school} />
                 );
                 break;
-            case "Calendar":
+            case CALENDAR:
                 content = 
                     (
                         <CalendarContent school = {this.state.school}/>
                     );
                 break;
-            case "Contact Us":
+            case CONTACT_US:
                 content = (
                     <ContactUsContent school={this.state.school}/>
                 );
 
                 break;
-            case "Welcome":
+            case WELCOME:
                 content = 
                 (
                     <div id="welcome-page" style = {{backgroundImage: `url(${banner})`}}>
@@ -1231,10 +1258,15 @@ class Page extends React.Component {
                 break;
         }
 
-        if(this.state.currentPage !== "Welcome") {
+        if(this.state.currentPage !== WELCOME) {
             return (
                 <div id="page">
-                    <NavBar linkTexts = {["Home", "Parent Portal", "Gallery", "Calendar", "Contact Us"]} logo = {this.state.school} onClick = {(currentPage) => this.handleClick(currentPage)}/>
+                    {
+                       (this.state.currentPage !== PARENT_PORTAL) ? <NavBar linkTexts = 
+                       {[HOME, PARENT_PORTAL_LOGIN , GALLERY, CALENDAR, CONTACT_US]} 
+                       logo = {this.state.school} onClick = {(currentPage) => this.handleClick(currentPage)}
+                       activeLink={this.state.currentPage}/>:null
+                    }
                     <div id="pageContent">{content}</div>
                 </div>
             );

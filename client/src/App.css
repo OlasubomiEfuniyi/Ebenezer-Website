@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lobster|Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Oswald|Lobster|Open+Sans&display=swap');
 
 /***************************** General Styling **************************************/
 body, html, #root {
@@ -20,7 +20,7 @@ body, html, #root {
     padding-top: 60px;
     color: black;
     text-align: center;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 #page {
@@ -74,7 +74,7 @@ a:hover {
 }
 
 .navBarLink {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     color:#0d3580 !important;
     font-size: 17px !important;
     margin-left: 10px;
@@ -101,7 +101,7 @@ a:hover {
 .home-card {
     width: 100%;
     margin: auto;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     height: 100%;
 }
 
@@ -123,7 +123,7 @@ a:hover {
 
 .nav-link {
     color: #0d3580;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 17px;
 }
 
@@ -132,7 +132,7 @@ a:hover {
 }
 
 .tab-content {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     margin-top: 20px;
     height: 300px;
 }
@@ -170,7 +170,7 @@ a:hover {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     padding-top: 200px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     color: white;
 }
 
@@ -194,7 +194,7 @@ a:hover {
 
 /******************************** Contact Us styling ******************************************/
 .contact-us-content {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     padding-top: 100px;
     display: flex;
     width: 100%;
@@ -242,13 +242,13 @@ a:hover {
 .contact-us-header {
     font-weight: bold;
     color: #0d3580;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 /******************** Calendar styling **************/
 .calendar {
     padding-top: 100px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 .calendar > p {
@@ -256,7 +256,7 @@ a:hover {
 }
 
 .calendar-content {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
     display: flex;
 }
 
@@ -292,7 +292,7 @@ a:hover {
 .calendar-card-header {
     font-weight: bold;
     color: #0d3580;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 /******************* Gallery Styling ********************************/
@@ -361,14 +361,49 @@ a:hover {
 
 /********************** Parent Portal Content Styling ***********************/
 .parent-portal-content {
-    margin-top: 100px;
+    padding-top: 50px;
     font-family: 'Open sans', sans-serif;
+    width: 100%;
+}
+
+.parent-portal-heading {
+    display: flex;
+    width: 100%;
+}
+
+.parent-portal-logout {
+    width: 100%;
+    padding: 10px;
+}
+
+.parent-portal-dashboard {
+    display: flex;
+}
+
+.parent-portal-dashboard-controls {
+    width: 20%;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 3%;
+    padding: 10px;
+    color: black;
+}
+
+.parent-portal-dashboard-content {
+    width: 70%;
+    padding: 20px;
+}
+
+.parent-portal-dashboard-controls input[type="radio"] {
+    margin-right: 5px;
 }
 
 .parent-portal-full-name {
     font-family: 'Open sans', sans-serif;
     font-size: 20px;
     font-weight: bold;
+    border-radius: 3%;
+    margin-bottom: 20px;
 }
 
 /******************************** Media queries ***********************************************/
@@ -459,6 +494,25 @@ a:hover {
     }
 
     .contact-us-info {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 500px) and (min-width: 0px) {
+    .parent-portal-heading {
+        display: block;
+        margin-bottom: 40px;
+    }
+    
+    .parent-portal-dashboard {
+        display: block;
+    }
+    
+    .parent-portal-dashboard-controls {
+        width: 100%;
+    }
+    
+    .parent-portal-dashboard-content {
         width: 100%;
     }
 }
