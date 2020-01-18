@@ -2,14 +2,20 @@ import React from 'react';
 import './App.css';
 import banner from './images/banner.jpg';
 import banner1 from './images/banner1.jpg';
+import ClipLoader from "react-spinners/ClipLoader";
+import {css} from "@emotion/core";
 
+const override = css`
+    display: block;
+    margin: 0 auto;
+`;
 const EMS = "EMS";
 const EMHS = "EMHS";
 const HOME = "Home";
 const PARENT_PORTAL_LOGIN = "Parent Portal";
 const GALLERY = "Gallery";
 const CALENDAR = "Calendar";
-const CONTACT_US = "Contact US";
+const CONTACT_US = "Contact Us";
 const WELCOME = "Welcome";
 const PARENT_PORTAL = "Parent Portal Dashboard";
 
@@ -928,6 +934,9 @@ class ParentPortalContent extends React.Component {
             totalBalace: null,
             paymentHistory: [],
             children: [],
+            totalBalanceLoading: false,
+            paymentHistoryLoading: true,
+            childrenLoading: true,
         }
     }
 
@@ -946,10 +955,9 @@ class ParentPortalContent extends React.Component {
             if(status === 200) {
                 outerThis.setState({
                     children: JSON.parse(this.response),
+                    childrenLoading: false,
                 });
             }
-
-            console.log(this.status);
         }
 
         xhttp.open("POST", "http://localhost:9000/parent-portal/get-children", true);
@@ -958,7 +966,7 @@ class ParentPortalContent extends React.Component {
     }
 
     getDataForChild(childData) {
-        this.setState({activeChild: childData});
+        this.setState({activeChild: childData, totalBalanceLoading: true, paymentHistoryLoading: true});
         this.getTotalBalace(childData);
         this.getPaymentHistory(childData);
     }
@@ -975,16 +983,21 @@ class ParentPortalContent extends React.Component {
                 console.log(data);
                 outerThis.setState({
                     totalBalance: data.totalBalance,
+                    totalBalanceLoading: false,
                 });
             }
         };
 
-        xhttp.open("POST", "http://localhost:9000/parent-portal/get-data-for-child", true);
+        if(childData) {
+            xhttp.open("POST", "http://localhost:9000/parent-portal/get-data-for-child", true);
+        } else {
+            xhttp.open("POST", "http://localhost:9000/parent-portal/get-total-balance", true);
+        }
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify({child: childData, username: this.props.userData.username}));
     }
 
-    getPaymentHistory(childData) {
+    getPaymentHistory(childData, oncComplete) {
         let xhttp = new XMLHttpRequest();
 
         let outerThis = this;
@@ -994,6 +1007,7 @@ class ParentPortalContent extends React.Component {
                 let data = JSON.parse(this.response);
                 outerThis.setState({
                     paymentHistory: data.paymentHistory,
+                    paymentHistoryLoading: false,
                 });
             }
         };
@@ -1014,53 +1028,65 @@ class ParentPortalContent extends React.Component {
                 </div>
                 <div className="parent-portal-dashboard">
                     <div className="parent-portal-dashboard-controls bg-danger">
-                        <div className = "parent-portal-full-name"><h5>{this.props.userData["lastName"] + "'s Account"}</h5></div>
-                        <form>
-                            <div className="radio">
-                                <label>
-                                    <input type="radio" checked={!this.state.activeChild} value="All" onChange = {
-                                        () => {
-                                            this.getDataForChild(null);
-                                        }
-                                    }/>All
-                                </label>
-                            </div>
-                            {this.state.children.map((value, index) => 
-                                (
-                                    <div key = {index} className="radio">
-                                        <label>
-                                            <input type="radio" 
-                                            checked={this.state.activeChild && (this.state.activeChild.firstName === value.firstName && this.state.activeChild.lastName === value.lastName)} 
-                                            value = {value.firstName + " " + value.lastName} 
-                                            onChange={() => this.getDataForChild(value)}/>
-                                        </label>{value.firstName + " " + value.lastName}
-                                    </div>
-                                )
-                            )}
-                        </form>
+                    {
+                        this.state.childrenLoading ?
+                        <div><ClipLoader css={override} size={100} color={"white"} loading={this.state.loading}/></div>:
+                        <div>
+                            <div className = "parent-portal-full-name"><h5>{this.props.userData["lastName"] + "'s Account"}</h5></div>
+                            <form>
+                                <div className="radio">
+                                    <label>
+                                        <input type="radio" checked={!this.state.activeChild} value="All" onChange = {
+                                            () => {
+                                                this.getDataForChild(null);
+                                            }
+                                        }/>All
+                                    </label>
+                                </div>
+                                {this.state.children.map((value, index) => 
+                                    (
+                                        <div key = {index} className="radio">
+                                            <label>
+                                                <input type="radio" 
+                                                checked={this.state.activeChild && (this.state.activeChild.firstName === value.firstName && this.state.activeChild.lastName === value.lastName)} 
+                                                value = {value.firstName + " " + value.lastName} 
+                                                onChange={() => this.getDataForChild(value)}/>
+                                            </label>{value.firstName + " " + value.lastName}
+                                        </div>
+                                    )
+                                )}
+                            </form>
+                        </div>
+                    }
                     </div>
                     <div className="parent-portal-dashboard-content">
-                        <h5>Total Balance: &#8358;{balance}</h5>
-                        <table className="table">
-                            <thead className="bg-danger">
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Payed for</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.paymentHistory.map((value, index) => 
-                                    <tr key={index}>
-                                        <td>{value.date}</td>
-                                        <td>&#8358;{value.amount}</td>
-                                        <td>{value.for.firstName} {value.for.lastName}</td>
+                    {
+                        (this.state.totalBalanceLoading || this.state.paymentHistoryLoading) ? 
+                        <div><ClipLoader css={override} size={150} color={"red"} loading={this.state.loading}/></div>:
+                        <div>
+                            <h5>Total Balance: &#8358;{balance}</h5>
+                            <table className="table">
+                                <thead className="bg-danger">
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Payed for</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.paymentHistory.map((value, index) => 
+                                        <tr key={index}>
+                                            <td>{value.date}</td>
+                                            <td>&#8358;{value.amount}</td>
+                                            <td>{value.for.firstName} {value.for.lastName}</td>
+                                        </tr>
+                                    
+                                    )}
                                 
-                                )}
-                            
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                     </div>
                 </div>
                 <Footer />

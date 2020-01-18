@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Oswald|Lobster|Open+Sans&display=swap');
-
+@import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lobster&display=swap');
 /***************************** General Styling **************************************/
 body, html, #root {
     height: 100%;
@@ -18,9 +17,8 @@ body, html, #root {
 .footer {
     width: 100%;
     padding-top: 60px;
-    color: black;
     text-align: center;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
 }
 
 #page {
@@ -74,7 +72,7 @@ a:hover {
 }
 
 .navBarLink {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     color:#0d3580 !important;
     font-size: 17px !important;
     margin-left: 10px;
@@ -101,7 +99,7 @@ a:hover {
 .home-card {
     width: 100%;
     margin: auto;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     height: 100%;
 }
 
@@ -121,18 +119,23 @@ a:hover {
     margin: auto;
 }
 
-.nav-link {
+#home-info-nav .nav-link {
     color: #0d3580;
-    font-family: 'Oswald', sans-serif;
-    font-size: 17px;
+    font-family: 'Lobster', sans-serif;
+    font-size: 20px;
 }
 
 .nav-link.active {
     color: #0d3580 !important;
 }
 
+.tab-content h5 {
+    font-family: 'Lobster', cursive;
+    font-size: 40px;
+}
+
 .tab-content {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     margin-top: 20px;
     height: 300px;
 }
@@ -153,6 +156,7 @@ a:hover {
 
 .tab-pane-text {
     float: right;
+    font-size: 25px;
     width: 50%;
     padding-left: 50px;
 }
@@ -170,7 +174,7 @@ a:hover {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     padding-top: 200px;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     color: white;
 }
 
@@ -194,7 +198,7 @@ a:hover {
 
 /******************************** Contact Us styling ******************************************/
 .contact-us-content {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     padding-top: 100px;
     display: flex;
     width: 100%;
@@ -242,13 +246,13 @@ a:hover {
 .contact-us-header {
     font-weight: bold;
     color: #0d3580;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Lobster', sans-serif;
 }
 
 /******************** Calendar styling **************/
 .calendar {
     padding-top: 100px;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
 }
 
 .calendar > p {
@@ -256,7 +260,7 @@ a:hover {
 }
 
 .calendar-content {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     display: flex;
 }
 
@@ -266,8 +270,9 @@ a:hover {
     padding-right: 20px;
 }
 
-.academic-calendar > table > thead > tr > th {
+.academic-calendar th {
     color: #0d3580;
+    font-size: 25px;
 }
 
 .academic-calendar-description {
@@ -290,9 +295,9 @@ a:hover {
 }
 
 .calendar-card-header {
-    font-weight: bold;
     color: #0d3580;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Lobster', cursive;
+    font-size: 30px;
 }
 
 /******************* Gallery Styling ********************************/
@@ -317,7 +322,7 @@ a:hover {
 }
 
 .gallery-card {
-    font-family: "Open sans", sans-serif;
+    font-family: "Lobster", sans-serif;
 }
 
 /********************* Parent Portal Login Styling ****************************/
@@ -327,6 +332,8 @@ a:hover {
     background-repeat: none;
     background-size: cover;
     background-position: center;
+    font-family: 'Cormorant Garamond', sans-serif;
+    color: white;
 }
 
 .parent-portal-login > div {
@@ -352,7 +359,7 @@ a:hover {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     border: 2px solid white;
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .parent-portal-login-form > .form-group > input:focus {
@@ -362,7 +369,7 @@ a:hover {
 /********************** Parent Portal Content Styling ***********************/
 .parent-portal-content {
     padding-top: 50px;
-    font-family: 'Open sans', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     width: 100%;
 }
 
@@ -386,12 +393,17 @@ a:hover {
     border: 1px solid white;
     border-radius: 3%;
     padding: 10px;
-    color: black;
+    color: white;
 }
 
 .parent-portal-dashboard-content {
     width: 70%;
     padding: 20px;
+    margin:  auto;
+}
+
+.parent-portal-dashboard-content thead {
+    color: white;
 }
 
 .parent-portal-dashboard-controls input[type="radio"] {
@@ -399,7 +411,7 @@ a:hover {
 }
 
 .parent-portal-full-name {
-    font-family: 'Open sans', sans-serif;
+    font-family: 'Cormorant Garamond', sans-serif;
     font-size: 20px;
     font-weight: bold;
     border-radius: 3%;
