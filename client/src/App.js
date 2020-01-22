@@ -4,23 +4,36 @@ import banner from './images/banner.jpg';
 import banner1 from './images/banner1.jpg';
 import ClipLoader from "react-spinners/ClipLoader";
 import {css} from "@emotion/core";
+import {
+    BrowserRouter as Router,
+    Link,
+    Switch,
+    Route,
+} from "react-router-dom";
 
 const override = css`
     display: block;
     margin: 0 auto;
 `;
-const EMS = "EMS";
-const EMHS = "EMHS";
-const HOME = "Home";
-const PARENT_PORTAL_LOGIN = "Parent Portal";
-const GALLERY = "Gallery";
-const CALENDAR = "Calendar";
-const CONTACT_US = "Contact Us";
-const WELCOME = "Welcome";
-const PARENT_PORTAL = "Parent Portal Dashboard";
+const EMS = "ems";
+const EMHS = "emhs";
+const HOME_TEXT = "Home";
+const HOME_PATH = "/home"
+const PARENT_PORTAL_LOGIN_TEXT = "Parent Portal";
+const PARENT_PORTAL_LOGIN_PATH = "/parent_portal"
+const GALLERY_TEXT = "Gallery";
+const GALLERY_PATH = "/gallery";
+const CALENDAR_TEXT = "Calendar";
+const CALENDAR_PATH = "/calendar";
+const CONTACT_US_TEXT = "Contact Us";
+const CONTACT_US_PATH = "/contact_us";
+const WELCOME_TEXT = "Welcome";
+const WELCOME_PATH = "/";
+const PARENT_PORTAL_TEXT = "Parent Portal Dashboard";
+const PARENT_PORTAL_PATH = "/parent_portal_dashboard";
 
 let data = {
-    "EMS": {
+    "ems": {
         home: {
             banner: {
                 img: banner1,
@@ -218,7 +231,7 @@ let data = {
         }
 
     },
-    "EMHS": {
+    "emhs": {
         home: {
             banner: {
                 img: banner1,
@@ -422,25 +435,6 @@ let data = {
 
 /*************************************************Navigation****************************************************************************/
 /**
- * This class represents the link in a navbar. It has the following properties:
- * className - the class to be given to the link
- * text - the text to be displayed for the link
- * isActive - Set to true if the link is the active link and false otherwise.
- */
-class NavBarLink extends React.Component {
-    render() {
-        let element = null;
-        if(this.props.isActive) {
-            element = <a onClick = {this.props.onClick} className = {this.props.className} href = "#" id="active">{this.props.text}<span className="sr-only">(current)</span></a>;
-        } else {
-            element = <a onClick = {this.props.onClick} className = {this.props.className} href = "#">{this.props.text}</a>
-        }
-
-        return element;
-    }
-}
-
-/**
  * This class represents the list element that encapsulates a link in a navbar. It has the following properties:
  * className - The class to be given to the list element
  * text - The text to be displayed in the link within the list element
@@ -449,15 +443,19 @@ class NavBarLink extends React.Component {
 class NavBarListElement extends React.Component {
     render() {
         let element = null;
-        if(!this.props.isActive) {
-            element = (<li className = {this.props.className}>
-                <NavBarLink onClick = {this.props.onClick} className = "nav-link navBarLink" text={this.props.text} isActive = {this.props.isActive}/>
-            </li>);
-        } else {
-            element = (<li className = {this.props.className}>
-                <NavBarLink onClick = {this.props.onClick} className = "nav-link navBarLink" text={this.props.text} isActive = {this.props.isActive}/>
-            </li>) 
-        }
+        
+        element = (
+        <Link to={this.props.path} onClick = {this.props.onClick}>
+            <li className = {this.props.className}>
+                {
+                    this.props.isActive ?  
+                    <span className = "nav-link navBarLink" id= "active">{this.props.text}<span className="sr-only">(current)</span></span>:
+                    <span className = "nav-link navBarLink">{this.props.text}</span>  
+                }
+            </li>
+        </Link>
+        );
+       
 
         return element;
     }
@@ -488,12 +486,11 @@ class NavBarList extends React.Component {
         this.setState({
             listElementsStatus: newListElementsStatus,
         });
-        this.props.onClick(key);
     }
 
     render() {
         let listElements = this.props.linkTexts.map((value, index) => {
-            return (<NavBarListElement key = {index} onClick = {() => this.handleClick(value)} className = "nav-item" text = {value} isActive = {this.state.listElementsStatus.get(value)}/>);
+            return (<NavBarListElement key = {index} onClick = {() => this.handleClick(value)} className = "nav-item" path = {"/" + this.props.school + this.props.linkPaths[index]} text = {value} isActive = {this.state.listElementsStatus.get(value)}/>);
         });
 
         return (
@@ -505,9 +502,10 @@ class NavBarList extends React.Component {
 }
 
 /** 
- * This class represents the navbar component of the website. Most of the render code was obtained from the bootstrap website.A
+ * This class represents the navbar component of the website. Most of the render code was obtained from the bootstrap website.
  * A navbar contains the logo of the website as well as a NavBarList component, to which it passes an array of the texts to be displayed in
  * the navbar.
+ * This navbar uses react-router
  * 
 */
 class NavBar extends React.Component {
@@ -516,13 +514,13 @@ class NavBar extends React.Component {
         return (
             <nav className="navbar fixed-top navbar-expand-lg navbar-dark">
                 <div className = "container-fluid">
-                    <a className="navbar-brand" href="#" id = "logo" onClick = {() => this.props.onClick("Welcome")}>{this.props.logo}</a>
+                    <Link to={WELCOME_PATH} className="navbar-brand" id = "logo">{this.props.logo}</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i className="fas fa-bars toggler-icon"></i>
                     </button>
     
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <NavBarList activeLink = {this.props.activeLink} onClick = {this.props.onClick} linkTexts = {linkTexts}/>
+                        <NavBarList activeLink = {this.props.activeLink} onClick = {this.props.onClick} linkTexts = {linkTexts} linkPaths={this.props.linkPaths} school={this.props.school}/>
                     </div>
                 </div>
             </nav>
@@ -530,6 +528,102 @@ class NavBar extends React.Component {
     }
 }
 
+class Home extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
+
+    render() {
+        return (
+        <div className = "home-content">
+            <div className = "banner" style={{backgroundImage:`url(${data[this.props.school].home.banner.img})`}}></div>
+            <div className = "home-info">
+                <div className = "home-info-content">
+                    <nav id="home-info-nav">
+                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a className="nav-item nav-link active" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="true">Vision</a>
+                            <a className="nav-item nav-link" id="nav-achievements-tab" data-toggle="tab" href="#nav-achievements" role="tab" aria-controls="nav-achievements" aria-selected="false">Achievements</a>
+                            <a className="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">History</a>
+                        </div>
+                    </nav>
+                    <div className="tab-content" id="nav-tabContent">
+                        <div className="tab-pane fade show active" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
+                            <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.props.school].home.history.img})`}}></div>
+                            <div className = "tab-pane-text">
+                                <h5><strong>{data[this.props.school].home.vision.title}</strong></h5>
+                                <p>{data[this.props.school].home.vision.text}</p>
+                            </div>
+                        </div>
+                        <div className="tab-pane fade" id="nav-achievements" role="tabpanel" aria-labelledby="nav-achievements-tab">
+                            <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.props.school].home.achievements.img})`}}></div>
+                            <div className = "tab-pane-text">
+                                <h5><strong>{data[this.props.school].home.achievements.title}</strong></h5>
+                                <p>{data[this.props.school].home.achievements.text}</p>
+                            </div>
+                        </div>
+                        <div className="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+                            <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.props.school].home.history.img})`}}></div>
+                            <div className = "tab-pane-text">
+                                <h5><strong>{data[this.props.school].home.history.title}</strong></h5>
+                                <p>{data[this.props.school].home.history.text}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div className = "home-info-small">
+                <div className="card-row">
+                    <div className="card-col">
+                        <ExtraInfoCard class = "home-card" 
+                            src = {data[this.props.school].home.vision.img} alt = "Vision Picture" title = {data[this.props.school].home.vision.title}
+                            description = {data[this.props.school].home.vision.text}
+                            buttonText = "More" />
+                    </div>
+                    <div className="card-col">
+                        <ExtraInfoCard class = "home-card" 
+                            src = {data[this.props.school].home.achievements.img} alt = "Achievements Picture" title = {data[this.props.school].home.achievements.title} 
+                            description = {data[this.props.school].home.achievements.text}
+                            buttonText = "More" />
+                    </div>
+                    <div className="card-col">
+                    <ExtraInfoCard class = "home-card" 
+                            src = {data[this.props.school].home.history.img} alt = "History Picture" title = {data[this.props.school].home.history.title}
+                            description = {data[this.props.school].home.history.text}
+                            buttonText = "More" />
+                    </div>
+                </div>
+            </div>
+            <Footer />
+        </div>
+        );
+    }
+}
+
+class Welcome extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
+
+    render() {
+        return (
+            <div id="welcome-page" style = {{backgroundImage: `url(${banner})`}}>
+                <div className = "welcome">
+                    <div className = "welcome-header">
+                        <div className = "col-sm-12 center-text">
+                            <h1 className="welcome-header-text">Welcome</h1>
+                        </div>
+                    </div>
+                    <br />
+                    <div className="welcome-buttons">
+                        <Link to={"/" + EMS + HOME_PATH}><button type = "button" className = "welcome-button btn btn-primary" onClick={()=>this.props.handleSchoolChange(EMS)}>Primary School</button></Link>
+                        <Link to={"/" + EMHS + HOME_PATH}><button type = "button" className = "welcome-button btn btn-primary" onClick={()=>this.props.handleSchoolChange(EMHS)}>Secondary School</button></Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
 class Card extends React.Component {
     render() {
         let content = null;
@@ -600,16 +694,20 @@ class ExtraInfoCard extends React.Component {
 }
 
 class ContactUsContent extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
+    
     constructor(props) {
         super(props);
         this.state = {
             submitted: false,
+            submitFailed: false,
         }
     }
 
     validateContactUs(event) {
         let fullName = document.getElementById("fullName").value;
-        let email = document.getElementById("email").value;
         let number = document.getElementById("number").value;
         let question = document.getElementById("question").value;
 
@@ -640,10 +738,30 @@ class ContactUsContent extends React.Component {
     }
 
     sendMail(event) {
-        let question = document.getElementById("question").value.replace(/,/g, ()=>"%2c").replace(/\n/g, () => "%0d%0a").replace(/\s/g, "%20").replace(/\./g, () => "%2E");
-        window.location.href = "mailto:subsefun@gmail.com?subject=Question from Website &body=" + "From: " + document.getElementById("fullName").value + "%0d%0a" + "Tel: " + document.getElementById("number").value + "%0d%0a%0d%0a" + "Question:%0d%0a" + question;
-        console.log(question);
-        this.setState({submitted: true});
+        let question = document.getElementById("question").value;
+        let fullName = document.getElementById("honorifics").value + " " + document.getElementById("fullName").value;
+        let phoneNumber = document.getElementById("number").value;
+        let email = document.getElementById("email").value;
+
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/form/send-mail", true);
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify({
+            question: question,
+            fullName: fullName,
+            phoneNumber: phoneNumber,
+            email: email
+        }));
+
+        let outerThis = this;
+        xhttp.onload = function() {
+            if(this.status == 200) {
+                outerThis.setState({submitted: true, submitFailed: false});
+            } else {
+                outerThis.setState({submitFailed: true});
+            }
+        }
 
         event.preventDefault();
     }
@@ -691,6 +809,7 @@ class ContactUsContent extends React.Component {
                                         </div>
                                     </div>
                                     <button className="btn btn-primary" onClick = {(event) => this.validateContactUs(event)}>Submit</button>
+                                    {this.state.submitFailed ? <small className="form-text text-muted invalid-text">We could not submit your question. Please try agian.</small>:null}
                                 </form>
                             </div>
                         </div>
@@ -755,6 +874,10 @@ class InfoCard extends React.Component {
 }
 
 class CalendarContent extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -823,6 +946,10 @@ class Carousel extends React.Component {
 }
 
 class GalleryContent extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -850,6 +977,9 @@ class GalleryContent extends React.Component {
 }
 
 class ParentPortalLogin extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
 
     submit() {
         let xhttp = new XMLHttpRequest();
@@ -866,7 +996,7 @@ class ParentPortalLogin extends React.Component {
             }
         };
 
-        xhttp.open("POST", "http://localhost:9000/parent-portal-login", true);
+        xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/form/parent-portal-login", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify(formData));
     }
@@ -911,7 +1041,7 @@ class ParentPortalLogin extends React.Component {
                                 <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="password" />
                                 <small style={{backgroundColor: "white"}} id="passwordHelp" className="form-text text-muted invalid-text"></small>
                             </div>
-                            <button type="button" onClick={(event) => this.validate(event)} className="btn btn-primary">Login</button>
+                            <Link to={"/" + this.props.school + PARENT_PORTAL_PATH} onClick={(event) => this.validate(event)}><button type="button" className="btn btn-primary">Login</button></Link>
                         </form>
                     </div>
                     <Footer />
@@ -927,6 +1057,10 @@ class ParentPortalLogin extends React.Component {
  * all this to happen.
  */
 class ParentPortalContent extends React.Component {
+    componentDidMount() {
+        this.props.handleMount();
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -941,6 +1075,7 @@ class ParentPortalContent extends React.Component {
     }
 
     componentDidMount() {
+        this.props.handleMount();
         this.getChildren();
         this.getPaymentHistory();
     }
@@ -960,7 +1095,7 @@ class ParentPortalContent extends React.Component {
             }
         }
 
-        xhttp.open("POST", "http://localhost:9000/parent-portal/get-children", true);
+        xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/parent-portal/get-children", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify({username: this.props.userData.username}));
     }
@@ -989,9 +1124,9 @@ class ParentPortalContent extends React.Component {
         };
 
         if(childData) {
-            xhttp.open("POST", "http://localhost:9000/parent-portal/get-data-for-child", true);
+            xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/parent-portal/get-data-for-child", true);
         } else {
-            xhttp.open("POST", "http://localhost:9000/parent-portal/get-total-balance", true);
+            xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/parent-portal/get-total-balance", true);
         }
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify({child: childData, username: this.props.userData.username}));
@@ -1012,7 +1147,7 @@ class ParentPortalContent extends React.Component {
             }
         };
 
-        xhttp.open("POST", "http://localhost:9000/parent-portal/get-payment-history", true);
+        xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/parent-portal/get-payment-history", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify({username: this.props.userData.username, child: childData}));
     }
@@ -1023,7 +1158,7 @@ class ParentPortalContent extends React.Component {
             <div className="parent-portal-content">
                 <div className="parent-portal-heading">
                     <div className="parent-portal-logout">
-                        <button type="button" className="float-right btn btn-danger" onClick={() => this.props.handleLogout()}>Logout</button>
+                        <Link to={"/" + this.props.school + PARENT_PORTAL_LOGIN_PATH} onClick={() => this.props.handleLogout()}><button type="button" className="float-right btn btn-danger">Logout</button></Link>
                     </div>
                 </div>
                 <div className="parent-portal-dashboard">
@@ -1108,32 +1243,47 @@ class Footer extends React.Component {
 class Page extends React.Component {
     constructor(props) {
         super(props);
+        //Get the url from the browser to determine if the school is the primary or secondary
+        let url = window.location.pathname;
+        //Get the section of the path after the school acronym
+        let pathEnd = /(\/\w*)$/.exec(url)[0];
+        let currentPage = "";
+
+        switch(pathEnd) {
+            case HOME_PATH:
+                currentPage = HOME_TEXT;
+                break;
+            case PARENT_PORTAL_LOGIN_PATH:
+                currentPage = PARENT_PORTAL_LOGIN_TEXT;
+                break;
+            case GALLERY_PATH:
+                currentPage = GALLERY_TEXT;
+                break;
+            case CALENDAR_PATH:
+                currentPage = CALENDAR_TEXT;
+                break;
+            case CONTACT_US_PATH:
+                currentPage = CONTACT_US_TEXT;
+                break;
+        }
+
         this.state = {
-            school: null,
-            currentPage: "Welcome",
+            school: url.match(`\/${EMS}\/`) ? EMS : EMHS,   //Set the school from the url the first time the page component is rendered
+            currentPage: currentPage,
             loggedIntoParentPortal: false,
             userData: null,
         };
     }
     
-    /* This method reacts to a click of a navbar link by changing the state of the page and updating the main contents of the page in the process */
-    handleClick(currentPage) {
+    handleMount(page) {
         this.setState({
-            currentPage:currentPage
-        });
-    }
-
-    handleClickForWelcome(school) {
-        this.setState({
-            school: school,
-            currentPage: "Home",
-        });
+            currentPage: page,
+        })
     }
 
     handleParentPortalLogin(userData) {
         this.setState({
             loggedIntoParentPortal: true,
-            currentPage: PARENT_PORTAL, //This is the only place from which the current page can be set to this
             userData: userData,
         });
         this.loadTotalBalance(userData);
@@ -1143,7 +1293,12 @@ class Page extends React.Component {
         this.setState({
             loggedIntoParentPortal: false,
             userData: null,
-            currentPage: PARENT_PORTAL_LOGIN,
+        });
+    }
+
+    handleSchoolChange(name) {
+        this.setState({
+            school: name,
         });
     }
 
@@ -1162,143 +1317,82 @@ class Page extends React.Component {
             }
         };
 
-        xhttp.open("POST", "http://localhost:9000/parent-portal/get-total-balance", true);
+        xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/parent-portal/get-total-balance", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify({username:userData.username}));
     }
 
-    render() {
-        let content = null;
-   
-        switch(this.state.currentPage) {
-            case HOME:
-                content = (
-                    <div className = "home-content">
-                        <div className = "banner" style={{backgroundImage:`url(${data[this.state.school].home.banner.img})`}}></div>
-                        <div className = "home-info">
-                            <div className = "home-info-content">
-                                <nav id="home-info-nav">
-                                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a className="nav-item nav-link active" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="true">Vision</a>
-                                        <a className="nav-item nav-link" id="nav-achievements-tab" data-toggle="tab" href="#nav-achievements" role="tab" aria-controls="nav-achievements" aria-selected="false">Achievements</a>
-                                        <a className="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">History</a>
-                                    </div>
-                                </nav>
-                                <div className="tab-content" id="nav-tabContent">
-                                    <div className="tab-pane fade show active" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
-                                        <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.state.school].home.history.img})`}}></div>
-                                        <div className = "tab-pane-text">
-                                            <h5><strong>{data[this.state.school].home.vision.title}</strong></h5>
-                                            <p>{data[this.state.school].home.vision.text}</p>
-                                        </div>
-                                    </div>
-                                    <div className="tab-pane fade" id="nav-achievements" role="tabpanel" aria-labelledby="nav-achievements-tab">
-                                        <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.state.school].home.achievements.img})`}}></div>
-                                        <div className = "tab-pane-text">
-                                            <h5><strong>{data[this.state.school].home.achievements.title}</strong></h5>
-                                            <p>{data[this.state.school].home.achievements.text}</p>
-                                        </div>
-                                    </div>
-                                    <div className="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
-                                        <div className = "tab-pane-img" style = {{backgroundImage: `url(${data[this.state.school].home.history.img})`}}></div>
-                                        <div className = "tab-pane-text">
-                                            <h5><strong>{data[this.state.school].home.history.title}</strong></h5>
-                                            <p>{data[this.state.school].home.history.text}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className = "home-info-small">
-                            <div className="card-row">
-                                <div className="card-col">
-                                    <ExtraInfoCard class = "home-card" 
-                                        src = {data[this.state.school].home.vision.img} alt = "Vision Picture" title = {data[this.state.school].home.vision.title}
-                                        description = {data[this.state.school].home.vision.text}
-                                        buttonText = "More" />
-                                </div>
-                                <div className="card-col">
-                                    <ExtraInfoCard class = "home-card" 
-                                        src = {data[this.state.school].home.achievements.img} alt = "Achievements Picture" title = {data[this.state.school].home.achievements.title} 
-                                        description = {data[this.state.school].home.achievements.text}
-                                        buttonText = "More" />
-                                </div>
-                                <div className="card-col">
-                                <ExtraInfoCard class = "home-card" 
-                                        src = {data[this.state.school].home.history.img} alt = "History Picture" title = {data[this.state.school].home.history.title}
-                                        description = {data[this.state.school].home.history.text}
-                                        buttonText = "More" />
-                                </div>
-                            </div>
-                        </div>
-                        <Footer />
-                    </div>
-                );
-                break;
-            case PARENT_PORTAL_LOGIN:
-                content = (
-                    <ParentPortalLogin school={this.state.school} handleLogin={(userData) => this.handleParentPortalLogin(userData)}/>
-                );
-                break;
-            case PARENT_PORTAL:
-                content = (
-                    <ParentPortalContent userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()}/>
-                );
-                break;
-            case GALLERY:
-                content = (
-                    <GalleryContent school={this.state.school} />
-                );
-                break;
-            case CALENDAR:
-                content = 
-                    (
-                        <CalendarContent school = {this.state.school}/>
-                    );
-                break;
-            case CONTACT_US:
-                content = (
-                    <ContactUsContent school={this.state.school}/>
-                );
-
-                break;
-            case WELCOME:
-                content = 
-                (
-                    <div id="welcome-page" style = {{backgroundImage: `url(${banner})`}}>
-                        <div className = "welcome">
-                            <div className = "welcome-header">
-                                <div className = "col-sm-12 center-text">
-                                    <h1 className="welcome-header-text">Welcome</h1>
-                                </div>
-                            </div>
-                            <br />
-                            <div className="welcome-buttons">
-                                <button type = "button" className = "welcome-button btn btn-primary" onClick={() => this.handleClickForWelcome(EMS)}>Primary School</button>
-                                <button type = "button" className = "welcome-button btn btn-primary" onClick={() => this.handleClickForWelcome(EMHS)}>Secondary School</button>
-                            </div>
-                        </div>
-                    </div>
-                );
-                break;
-        }
-
-        if(this.state.currentPage !== WELCOME) {
-            return (
+    render() {        
+        return (
+            <Router>
                 <div id="page">
                     {
-                       (this.state.currentPage !== PARENT_PORTAL) ? <NavBar linkTexts = 
-                       {[HOME, PARENT_PORTAL_LOGIN , GALLERY, CALENDAR, CONTACT_US]} 
-                       logo = {this.state.school} onClick = {(currentPage) => this.handleClick(currentPage)}
-                       activeLink={this.state.currentPage}/>:null
+                    (this.state.currentPage !== PARENT_PORTAL_TEXT && this.state.currentPage !== WELCOME_TEXT) ? <NavBar linkTexts = 
+                    {[HOME_TEXT, PARENT_PORTAL_LOGIN_TEXT , GALLERY_TEXT, CALENDAR_TEXT, CONTACT_US_TEXT]}
+                    linkPaths = {[HOME_PATH, PARENT_PORTAL_LOGIN_PATH, GALLERY_PATH, CALENDAR_PATH, CONTACT_US_PATH]} 
+                    logo = {this.state.school.toUpperCase()}
+                    school = {this.state.school}
+                    activeLink={this.state.currentPage}
+                    />:null
                     }
-                    <div id="pageContent">{content}</div>
+
+                    <Switch>
+                        {/*EMS Routes*/}
+                        <Route path={"/" + EMS + HOME_PATH}>
+                            <Home school={EMS} handleMount={()=>{this.handleMount(HOME_TEXT)}}/>
+                        </Route>
+                        <Route path={"/" + EMS + PARENT_PORTAL_LOGIN_PATH}>
+                            <ParentPortalLogin school={EMS} handleLogin={(userData) => {this.handleParentPortalLogin(userData)}} handleMount={() => this.handleMount(PARENT_PORTAL_LOGIN_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMS + GALLERY_PATH}>
+                            <GalleryContent school={EMS} handleMount={()=>this.handleMount(GALLERY_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMS + CALENDAR_PATH}>
+                            <CalendarContent school={EMS} handleMount={()=>this.handleMount(CALENDAR_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMS + CONTACT_US_PATH}>
+                            <ContactUsContent school={EMS} handleMount={()=>this.handleMount(CONTACT_US_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMS + PARENT_PORTAL_PATH}>
+                            {
+                                this.state.loggedIntoParentPortal ? 
+                                <ParentPortalContent school={EMS} userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()} handleMount={()=>this.handleMount(PARENT_PORTAL_TEXT)}/>:
+                                <ParentPortalLogin school={EMS} handleLogin={(userData) => this.handleParentPortalLogin(userData)} handleMount={()=>this.handleMount(PARENT_PORTAL_LOGIN_TEXT)}/>
+                            }
+                        </Route>
+                        
+                        {/*EMHS Routes*/}
+                        <Route path={"/" + EMHS + HOME_PATH}>
+                            <Home school={EMHS} handleMount={()=>this.handleMount(HOME_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMHS + PARENT_PORTAL_LOGIN_PATH}>
+                            <ParentPortalLogin school={EMHS} handleLogin={(userData) => this.handleParentPortalLogin(userData)} handleMount={()=>this.handleMount(PARENT_PORTAL_LOGIN_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMHS + GALLERY_PATH}>
+                            <GalleryContent school={EMS} handleMount={()=>this.handleMount(GALLERY_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMHS + CALENDAR_PATH}>
+                            <CalendarContent school={EMHS} handleMount={()=>this.handleMount(CALENDAR_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMHS + CONTACT_US_PATH}>
+                            <ContactUsContent school={EMHS} handleMount={()=>this.handleMount(CONTACT_US_TEXT)}/>
+                        </Route>
+                        <Route path={"/" + EMHS + PARENT_PORTAL_PATH}>
+                            {
+                                this.state.loggedIntoParentPortal ? 
+                                <ParentPortalContent school={EMHS} userData={this.state.userData} handleLogout={() => this.handleParentPortalLogout()} handleMount={()=>this.handleMount(PARENT_PORTAL_TEXT)}/>:
+                                <ParentPortalLogin school={EMHS} handleLogin={(userData) => this.handleParentPortalLogin(userData)} handleMount={()=>this.handleMount(PARENT_PORTAL_LOGIN_TEXT)}/>
+                            }
+                        </Route>
+
+                        {/* Welcome page route */}
+                        <Route path={WELCOME_PATH}>
+                            <Welcome handleMount={()=>this.handleMount(WELCOME_TEXT)} handleSchoolChange={(school) => this.handleSchoolChange(school)}/>
+                        </Route>
+                    </Switch>
                 </div>
-            );
-        } else {
-            return (content);
-        }
+            </Router>
+        );
     }
 }
 
