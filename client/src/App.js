@@ -701,6 +701,7 @@ class ContactUsContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoading: false,
             submitted: false,
             submitFailed: false,
         }
@@ -738,6 +739,10 @@ class ContactUsContent extends React.Component {
     }
 
     sendMail(event) {
+        this.setState({
+            isLoading: true,
+        });
+
         let question = document.getElementById("question").value;
         let fullName = document.getElementById("honorifics").value + " " + document.getElementById("fullName").value;
         let phoneNumber = document.getElementById("number").value;
@@ -745,7 +750,7 @@ class ContactUsContent extends React.Component {
 
         let xhttp = new XMLHttpRequest();
 
-        xhttp.open("POST", "https://ems-emhs-backend.herokuapp.com/form/send-mail", true);
+        xhttp.open("POST", "http://localhost:9000/form/send-mail", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify({
             question: question,
@@ -757,9 +762,9 @@ class ContactUsContent extends React.Component {
         let outerThis = this;
         xhttp.onload = function() {
             if(this.status == 200) {
-                outerThis.setState({submitted: true, submitFailed: false});
+                outerThis.setState({submitted: true, submitFailed: false, isLoading: false});
             } else {
-                outerThis.setState({submitFailed: true});
+                outerThis.setState({submitFailed: true, isLoading: false});
             }
         }
 
@@ -769,53 +774,57 @@ class ContactUsContent extends React.Component {
     render() {
         let questionSection = null;
         if(!this.state.submitted) {
-            questionSection = 
-            (
-                <div className="contact-us-questions">
-                    <div className="contact-us-questions-card-container">
-                        <div className="card">
-                            <div className="card-header contact-us-header">
-                                <h5 className="card-title">Questions</h5>
-                            </div>
-                            <div className="card-body">
-                                <form className="contact-us-form" onSubmit={(event) => this.sendMail(event)}>
-                                    <div className = "form-row">
-                                        <div className="form-group col-md-4">
-                                            <select defaultValue = {"Mrs."} id="honorifics" className="form-control">
-                                                <option value="Mrs.">Mrs.</option>
-                                                <option value="Mr.">Mr.</option>
-                                            </select>
-                                        </div>
-                                        <div className="form-group col-md-8">
-                                            <div className="form-group">
-                                                <input type="text" className="form-control" id="fullName" aria-describedby = "fullNameHelp" placeholder="Full Name" required/>
-                                                <small id="fullNameHelp" className="form-text text-muted invalid-text"></small>
+            if(!this.state.isLoading) {
+                questionSection = 
+                (
+                    <div className="contact-us-questions">
+                        <div className="contact-us-questions-card-container">
+                            <div className="card">
+                                <div className="card-header contact-us-header">
+                                    <h5 className="card-title">Questions</h5>
+                                </div>
+                                <div className="card-body">
+                                    <form className="contact-us-form" onSubmit={(event) => this.sendMail(event)}>
+                                        <div className = "form-row">
+                                            <div className="form-group col-md-4">
+                                                <select defaultValue = {"Mrs."} id="honorifics" className="form-control">
+                                                    <option value="Mrs.">Mrs.</option>
+                                                    <option value="Mr.">Mr.</option>
+                                                </select>
+                                            </div>
+                                            <div className="form-group col-md-8">
+                                                <div className="form-group">
+                                                    <input type="text" className="form-control" id="fullName" aria-describedby = "fullNameHelp" placeholder="Full Name" required/>
+                                                    <small id="fullNameHelp" className="form-text text-muted invalid-text"></small>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group col-md-6">
-                                            <input type="email" className="form-control" id="email" placeholder="Email"/>
+                                        <div className="form-row">
+                                            <div className="form-group col-md-6">
+                                                <input type="email" className="form-control" id="email" placeholder="Email"/>
+                                            </div>
+                                            <div className="form-group col-md-6">
+                                                <input type="tel" className="form-control" id="number" aria-describedby = "numberHelp" placeholder="Phone Number" required/>
+                                                <small id="numberHelp" className="form-text text-muted invalid-text"></small>
+                                            </div>
                                         </div>
-                                        <div className="form-group col-md-6">
-                                            <input type="tel" className="form-control" id="number" aria-describedby = "numberHelp" placeholder="Phone Number" required/>
-                                            <small id="numberHelp" className="form-text text-muted invalid-text"></small>
+                                        <div className="form-row">
+                                            <div className="form-group col-md-12">
+                                                <textarea className="form-control" id="question" aria-describedby = "questionHelp" rows = "3" placeholder = "Question" required></textarea>
+                                                <small id="questionHelp" className="form-text text-muted invalid-text"></small>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group col-md-12">
-                                            <textarea className="form-control" id="question" aria-describedby = "questionHelp" rows = "3" placeholder = "Question" required></textarea>
-                                            <small id="questionHelp" className="form-text text-muted invalid-text"></small>
-                                        </div>
-                                    </div>
-                                    <button className="btn btn-primary" onClick = {(event) => this.validateContactUs(event)}>Submit</button>
-                                    {this.state.submitFailed ? <small className="form-text text-muted invalid-text">We could not submit your question. Please try agian.</small>:null}
-                                </form>
+                                        <button className="btn btn-primary" onClick = {(event) => this.validateContactUs(event)}>Submit</button>
+                                        {this.state.submitFailed ? <small className="form-text text-muted invalid-text">We could not submit your question. Please try agian.</small>:null}
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            );
+                );
+            } else {
+                questionSection = (<div className="contact-us-questions"><ClipLoader css={override} size = "150" color="#0d3580" loading={this.state.isLoading} /></div>);
+            }
         } else {
             questionSection = 
             (
@@ -977,11 +986,24 @@ class GalleryContent extends React.Component {
 }
 
 class ParentPortalLogin extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+            loginAttempted: false,
+            loginSuccessful: false
+        };
+    }
     componentDidMount() {
         this.props.handleMount();
     }
 
     submit() {
+        this.setState({
+            isLoading: true,
+            loginAttempted: true
+        });
+
         let xhttp = new XMLHttpRequest();
         let formData = {
             username: document.getElementById("username").value,
@@ -992,7 +1014,16 @@ class ParentPortalLogin extends React.Component {
         xhttp.onload = function() {
             let status = this.status;
             if(status == 200) {
+                outerThis.setState({
+                    isLoading: false,
+                    loginSuccessful: true
+                });
                 outerThis.props.handleLogin(JSON.parse(this.response));
+            } else {
+                outerThis.setState({
+                    isLoading: false,
+                    loginSuccessful: false
+                });
             }
         };
 
@@ -1031,19 +1062,28 @@ class ParentPortalLogin extends React.Component {
         return (
             <div style={{backgroundImage: `url(${data[this.props.school].parentPortal.backgroundImage})`}} className = "parent-portal-login">
                 <div className = "tint">
-                    <div className="parent-portal-login-form-container">
-                        <form className="parent-portal-login-form">
-                            <div className="form-group">
-                                <input type="text" className="form-control" id="username" aria-describedby="username" placeholder="username" />
-                                <small style={{backgroundColor: "white"}} id="usernameHelp" className="form-text text-muted invalid-text"></small>
-                            </div>
-                            <div className="form-group">
-                                <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="password" />
-                                <small style={{backgroundColor: "white"}} id="passwordHelp" className="form-text text-muted invalid-text"></small>
-                            </div>
-                            <Link to={"/" + this.props.school + PARENT_PORTAL_PATH} onClick={(event) => this.validate(event)}><button type="button" className="btn btn-primary">Login</button></Link>
-                        </form>
-                    </div>
+                    {
+                        !this.state.isLoading ?
+                        (<div className="parent-portal-login-form-container">
+                            {
+                                this.state.loginAttempted && !this.state.loginSuccessful ? 
+                                <div style={{backgroundColor: "white"}} className="invalid-text">Login failed. Username and/or password may be incorrect.</div>:
+                                null
+                            }
+                            <form className="parent-portal-login-form">
+                                <div className="form-group">
+                                    <input type="text" className="form-control" id="username" aria-describedby="username" placeholder="username" />
+                                    <small style={{backgroundColor: "white"}} id="usernameHelp" className="form-text text-muted invalid-text"></small>
+                                </div>
+                                <div className="form-group">
+                                    <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="password" />
+                                    <small style={{backgroundColor: "white"}} id="passwordHelp" className="form-text text-muted invalid-text"></small>
+                                </div>
+                                <Link to={"/" + this.props.school + PARENT_PORTAL_PATH} onClick={(event) => this.validate(event)}><button type="button" className="btn btn-primary">Login</button></Link>
+                            </form>
+                        </div>):
+                        <div className = "parent-portal-login-form-container"><ClipLoader css={override} size={200} color="white" loading={this.state.isLoading} /></div>
+                    }
                     <Footer />
                 </div>
             </div>
